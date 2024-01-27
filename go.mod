@@ -1,4 +1,4 @@
-module git-conversa
+module gc
 
 go 1.21.6
 

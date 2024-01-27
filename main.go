@@ -12,7 +12,7 @@ var rootCmd = &cobra.Command{
 	Use:   "git-conversa",
 	Short: "A Git interface with chat-based AI",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("Welcome to Git Conversa! Use 'git-conversa help' to see available commands.")
+		fmt.Println("Welcome to Git Conversa! Use 'git-conversa(gc-tools) help' to see available commands.")
 	},
 }
 

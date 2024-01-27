@@ -21,5 +21,5 @@ go build
 You can verify the installation by checking if the executable is accessible from any directory in your terminal:
 
 ```sh
-git-conversa
+git-conversa aka gc
 ```
