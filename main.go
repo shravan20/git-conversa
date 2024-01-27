@@ -4,7 +4,9 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"strings"
 
+	"github.com/c-bata/go-prompt"
 	"github.com/spf13/cobra"
 )
 
@@ -13,6 +15,31 @@ var rootCmd = &cobra.Command{
 	Short: "A Git interface with chat-based AI",
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("Welcome to Git Conversa! Use 'git-conversa help' to see available commands.")
+		p := prompt.New(
+			func(t string) { // onInput
+				t = strings.TrimSpace(t)
+				if t == "" {
+					return
+				}
+
+				if t == "exit" || t == "quit" {
+					os.Exit(0)
+				}
+
+				parts := strings.Fields(t)
+				if len(parts) > 0 {
+					command := parts[0]
+					args := parts[1:]
+					executeCommand(command, args)
+				}
+			},
+			completer,
+			prompt.OptionPrefix("> "),
+			prompt.OptionTitle("Git Conversa"),
+			prompt.OptionInputTextColor(prompt.Yellow),
+		)
+
+		p.Run()
 	},
 }
 
@@ -184,6 +211,41 @@ func gitCommand(command string, args []string) {
 		fmt.Println("Error:", err)
 		os.Exit(1)
 	}
+}
+
+// Function to execute Git commands
+func executeCommand(command string, args []string) {
+	cmd := exec.Command("git", append([]string{command}, args...)...)
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+
+	err := cmd.Run()
+	if err != nil {
+		fmt.Println("Error:", err)
+	}
+}
+
+func completer(d prompt.Document) []prompt.Suggest {
+	suggestions := []prompt.Suggest{
+		{Text: "add", Description: "Add files to the staging area"},
+		{Text: "branch", Description: "Create, list, or delete branches"},
+		{Text: "checkout", Description: "Switch branches"},
+		{Text: "commit", Description: "Commit changes to the repository"},
+		{Text: "fetch", Description: "Download objects from a remote repository"},
+		{Text: "grep", Description: "Search for text in the repository"},
+		{Text: "init", Description: "Initialize a new repository"},
+		{Text: "log", Description: "Show the commit history"},
+		{Text: "merge", Description: "Merge branches"},
+		{Text: "pull", Description: "Fetch and merge changes from a remote repository"},
+		{Text: "push", Description: "Push changes to a remote repository"},
+		{Text: "rebase", Description: "Apply commits from one branch to another"},
+		{Text: "reset", Description: "Unstage or reset changes"},
+		{Text: "rm", Description: "Remove files from the repository"},
+		{Text: "show", Description: "Show information about a commit, tag, or branch"},
+		{Text: "status", Description: "Show the status of the working directory and staging area"},
+		{Text: "tag", Description: "Create, list, or delete tags"},
+	}
+	return prompt.FilterHasPrefix(suggestions, d.GetWordBeforeCursor(), true)
 }
 
 func main() {
