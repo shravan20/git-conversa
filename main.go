@@ -9,7 +9,7 @@ import (
 )
 
 var rootCmd = &cobra.Command{
-	Use:   "git-aiui",
+	Use:   "git-conversa",
 	Short: "A Git interface with chat-based AI",
 	Run: func(cmd *cobra.Command, args []string) {
 		gitStatus()

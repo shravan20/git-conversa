@@ -1,4 +1,4 @@
-module hello
+module git-conversa
 
 go 1.21.6
 
