@@ -12,7 +12,7 @@ var rootCmd = &cobra.Command{
 	Use:   "git-conversa",
 	Short: "A Git interface with chat-based AI",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("Welcome to Git Conversa! Use 'git-conversa(gc-tools) help' to see available commands.")
+		fmt.Println("Welcome to Git Conversa! Use 'git-conversa help' to see available commands.")
 	},
 }
 
@@ -45,7 +45,27 @@ var commitCmd = &cobra.Command{
 	Use:   "commit",
 	Short: "Commit changes to the repository",
 	Run: func(cmd *cobra.Command, args []string) {
-		gitCommand("commit", args)
+		message, _ := cmd.Flags().GetString("message")
+		if message == "" {
+			// Prompt for message if not provided
+			fmt.Print("Enter commit message: ")
+			fmt.Scanln(&message)
+		}
+
+		author, _ := cmd.Flags().GetString("author")
+		if author == "" {
+			// Prompt for author if not provided
+			fmt.Print("Enter commit author: ")
+			fmt.Scanln(&author)
+		}
+
+		// Validate and use the input values
+		if message == "" {
+			fmt.Println("Error: Commit message cannot be empty.")
+			os.Exit(1)
+		}
+
+		gitCommand("commit", []string{"-m", message, "--author", author})
 	},
 }
 
@@ -185,6 +205,10 @@ func main() {
 	rootCmd.AddCommand(showCmd)
 	rootCmd.AddCommand(statusCmd)
 	rootCmd.AddCommand(tagCmd)
+
+	// Add flags to the commit command
+	commitCmd.Flags().StringP("message", "m", "", "Commit message")
+	commitCmd.Flags().String("author", "", "Commit author")
 
 	// Execute the root command
 	if err := rootCmd.Execute(); err != nil {
