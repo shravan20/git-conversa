@@ -10,6 +10,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// GitConversa
 var rootCmd = &cobra.Command{
 	Use:   "git-conversa",
 	Short: "A Git interface with chat-based AI",
