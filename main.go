@@ -2,11 +2,13 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"os/exec"
 	"strings"
 
 	"github.com/c-bata/go-prompt"
+	"github.com/joho/godotenv"
 	"github.com/spf13/cobra"
 )
 
@@ -250,6 +252,15 @@ func completer(d prompt.Document) []prompt.Suggest {
 }
 
 func main() {
+
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file:", err)
+	}
+
+	key1 := os.Getenv("GEMINI_API")
+	fmt.Println("GEMINI_API:", key1)
+
 	// Add commands to the root command
 	rootCmd.AddCommand(addCmd)
 	rootCmd.AddCommand(branchCmd)
