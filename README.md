@@ -1,4 +1,4 @@
-# Git Conversa aka gca
+# Git Conversa aka gca : A git helper utility
 
 This is to simply execute the go code:
 
