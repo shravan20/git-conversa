@@ -1,4 +1,4 @@
-# Git Conversa
+# Git Conversa aka gca
 
 This is to simply execute the go code:
 
@@ -21,5 +21,5 @@ go build
 You can verify the installation by checking if the executable is accessible from any directory in your terminal:
 
 ```sh
-git-conversa aka gc
+git-conversa aka gca
 ```
